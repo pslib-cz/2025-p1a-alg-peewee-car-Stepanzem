@@ -5,7 +5,9 @@
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.6",
+        "pxt-peewee-light": "github:microbit-cz/pxt-peewee-light#v0.0.2"
     },
     "files": [
         "README.md",
@@ -23,5 +25,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
