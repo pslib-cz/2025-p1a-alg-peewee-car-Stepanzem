@@ -1,7 +1,7 @@
 
 > Otevřít tuto stránku v aplikaci [https://pslib-cz.github.io/2025-p1a-alg-peewee-car-stepanzem/](https://pslib-cz.github.io/2025-p1a-alg-peewee-car-stepanzem/)
 
-## Použít jako rozšíření
+## Použít jako rozšíření prosím
 
 Tento repozitář lze přidat jako **rozšíření** v aplikaci MakeCode.
 
