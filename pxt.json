@@ -1,11 +1,14 @@
 {
-    "name": "2025-p1a-alg-peewee-car-stepanzem",
+    "name": "2025-p1a-alg-peewee-car-stepanzem - Kopie",
     "version": "0.0.0",
     "description": "",
     "dependencies": {
         "core": "*",
         "radio": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.6",
+        "radio-broadcast": "*",
+        "pxt-peewee-light": "github:microbit-cz/pxt-peewee-light#v0.0.2"
     },
     "files": [
         "README.md",
@@ -23,5 +26,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
