@@ -1,1 +1,30 @@
+let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
+let serioveCisloOvladace: number = 1133145777
+radio.setGroup(23)
 
+radio.onReceivedString(function (receivedString: string) {
+    let ovladac: number = radio.receivedPacket(RadioPacketProperty.SerialNumber)
+    if (ovladac === serioveCisloOvladace) {
+        if (receivedString === "goForward") {
+            PeeWeeLight.wheelSpeed(100, -100)
+            strip.range(0, 9).showColor(NeoPixelColors.Red)
+        }
+        else if (receivedString === "turnRight") {
+            PeeWeeLight.wheelSpeed(0, -100)
+            strip.range(0, 9).showColor(NeoPixelColors.Blue)
+        }
+        else if (receivedString === "turnLeft") {
+            PeeWeeLight.wheelSpeed(100, 0)
+            strip.range(0, 9).showColor(NeoPixelColors.Yellow)
+        }
+        else if (receivedString === "stop") {
+            PeeWeeLight.wheelStop
+            strip.clear()
+        }
+    }
+})
+
+
+
+// potom zkontrolovat 
+// a potom dodelat tenhle  
