@@ -1,7 +1,7 @@
 # Řešení úkolu 1 a 2
 ## Link na google drive s videem
 https://drive.google.com/file/d/11G9PpqDkhBfw_jqtSvoQKFOtRCJLLQog/view?usp=drive_link
-`typescript`
+```typescript
 //**Making the LED's starting color**
 //I have 12 leds here for more smooth rainbow colors rotating
 let strip = neopixel.create(DigitalPin.P8, 12, NeoPixelMode.RGB)
@@ -107,3 +107,4 @@ basic.forever(() => {
     }
     basic.pause(10)
 })
+```
