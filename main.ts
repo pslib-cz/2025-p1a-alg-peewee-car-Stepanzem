@@ -1,105 +1,46 @@
-//**Making the LED's starting color**
-//I have 12 leds here for more smooth rainbow colors rotating
-let strip = neopixel.create(DigitalPin.P8, 12, NeoPixelMode.RGB)
-strip.showColor(neopixel.rgb(10, 82, 4))
+//*Kód pro ovládání microbitu*
+let serioveeCisloOvladace = -1133145777
+let strip2 = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
+radio.setGroup(23)
 
-//**Making logo on the built in microbit led screen**
-//(column, line, brightness)
+radio.onReceivedString(function (receivedString: string) {
 
-//First column
-led.plotBrightness(0, 0, 0)
-led.plotBrightness(0, 1, 0)
-led.plotBrightness(0, 2, 0)
-led.plotBrightness(0, 3, 255)
-led.plotBrightness(0, 4, 255)
+    let ovladac = radio.receivedPacket(
+        RadioPacketProperty.SerialNumber
+    )
 
-//Second column
-led.plotBrightness(1, 0, 255)
-led.plotBrightness(1, 1, 255)
-led.plotBrightness(1, 2, 0)
-led.plotBrightness(1, 3, 0)
-led.plotBrightness(1, 4, 255)
+    if (ovladac === serioveeCisloOvladace) {
+    
+        if (receivedString === "goForward") {
 
-//Third column
-led.plotBrightness(2, 0, 0)
-led.plotBrightness(2, 1, 0)
-led.plotBrightness(2, 2, 0)
-led.plotBrightness(2, 3, 0)
-led.plotBrightness(2, 4, 255)
+        
+            PeeWeeLight.wheelSpeed(100, -100)
 
-//Fourth column
-led.plotBrightness(3, 0, 255)
-led.plotBrightness(3, 1, 255)
-led.plotBrightness(3, 2, 0)
-led.plotBrightness(3, 3, 0)
-led.plotBrightness(3, 4, 255)
+            strip.showColor(NeoPixelColors.Red)
 
-//Fifth column
-led.plotBrightness(4, 0, 0)
-led.plotBrightness(4, 1, 0)
-led.plotBrightness(4, 2, 0)
-led.plotBrightness(4, 3, 255)
-led.plotBrightness(4, 4, 255)
-
-//**Body of the code**
-
-//*Starting*
-let didWeStart: boolean = false
-input.onButtonPressed(Button.A, () => {
-    didWeStart = true
-})
-
-//Movement
-basic.forever(() => {
-    if (didWeStart) {
-        //Spinning
-        PeeWeeLight.wheelSpeed(50, 50)
-        basic.pause(1000)
-        PeeWeeLight.wheelSpeed(-50, -50)
-        basic.pause(1000)
-        //Driving in many directions
-        PeeWeeLight.wheelStop()
-        basic.pause(500)
-        for (let i = 0; i <= 5; i++) {
-            PeeWeeLight.wheelSpeed(50, -50)
-            basic.pause(1000)
-            PeeWeeLight.wheelSpeed(50, 50)
-            basic.pause(333)
+        } 
+        else if(receivedString === "goBack"){
+            PeeWeeLight.wheelSpeed(-100, 100)
+            strip.showColor(NeoPixelColors.Indigo)
         }
-    }
-    basic.pause(10)
-})
+        else if (receivedString === "turnLeft") {
 
-//LED's
-basic.forever(() => {
-    if (didWeStart) {
-        strip.showRainbow(1, 360)
-        while (didWeStart) {
-            strip.rotate(1)
+            PeeWeeLight.wheelSpeed(100, 0)
+
+            strip.showColor(NeoPixelColors.Yellow)
+
+        } else if (receivedString === "turnRight") {
+
+            PeeWeeLight.wheelSpeed(0, -100)
+
+            strip.showColor(NeoPixelColors.Blue)
+
+        } else if (receivedString === "stop") {
+
+            PeeWeeLight.wheelStop()
+
+            strip.clear()
             strip.show()
-            basic.pause(500)
         }
     }
-    basic.pause(10)
-})
-
-//*Ending*
-input.onButtonPressed(Button.B, () => {
-    didWeStart = false
-})
-
-//Movement
-basic.forever(() => {
-    if (didWeStart === false) {
-        PeeWeeLight.wheelStop()
-    }
-    basic.pause(10)
-})
-
-//LED's
-basic.forever(() => {
-    if (didWeStart === false) {
-        strip.showColor(neopixel.rgb(10, 82, 4))
-    }
-    basic.pause(10)
 })
