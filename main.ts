@@ -1,6 +1,6 @@
 //*Kód pro ovládání microbitu*
 let serioveeCisloOvladace = -1133145777
-let strip2 = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
+let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
 radio.setGroup(23)
 
 radio.onReceivedString(function (receivedString: string) {
