@@ -2,43 +2,26 @@
 let serioveeCisloOvladace = -1133145777
 let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
 radio.setGroup(23)
+let rychlost: number = 100
 
 radio.onReceivedString(function (receivedString: string) {
-
-    let ovladac = radio.receivedPacket(
-        RadioPacketProperty.SerialNumber
-    )
-
+    let ovladac = radio.receivedPacket(RadioPacketProperty.SerialNumber)
     if (ovladac === serioveeCisloOvladace) {
-    
+
         if (receivedString === "goForward") {
-
-        
-            PeeWeeLight.wheelSpeed(100, -100)
-
+            PeeWeeLight.wheelSpeed(rychlost, -rychlost)
             strip.showColor(NeoPixelColors.Red)
-
-        } 
-        else if(receivedString === "goBack"){
-            PeeWeeLight.wheelSpeed(-100, 100)
+        } else if(receivedString === "goBack"){
+            PeeWeeLight.wheelSpeed(-rychlost, rychlost)
             strip.showColor(NeoPixelColors.Indigo)
-        }
-        else if (receivedString === "turnLeft") {
-
-            PeeWeeLight.wheelSpeed(100, 0)
-
+        } else if (receivedString === "turnLeft") {
+            PeeWeeLight.wheelSpeed(rychlost, 0)
             strip.showColor(NeoPixelColors.Yellow)
-
         } else if (receivedString === "turnRight") {
-
-            PeeWeeLight.wheelSpeed(0, -100)
-
+            PeeWeeLight.wheelSpeed(0, -rychlost)
             strip.showColor(NeoPixelColors.Blue)
-
         } else if (receivedString === "stop") {
-
             PeeWeeLight.wheelStop()
-
             strip.clear()
             strip.show()
         }
