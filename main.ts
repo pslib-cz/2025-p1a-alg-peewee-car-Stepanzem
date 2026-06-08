@@ -3,6 +3,7 @@ let serioveeCisloOvladace = -1133145777
 let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
 radio.setGroup(23)
 let rychlost: number = 100
+let shakedTimes: number = 0
 
 radio.onReceivedString(function (receivedString: string) {
     let ovladac = radio.receivedPacket(RadioPacketProperty.SerialNumber)
@@ -24,6 +25,14 @@ radio.onReceivedString(function (receivedString: string) {
             PeeWeeLight.wheelStop()
             strip.clear()
             strip.show()
+        } else if (receivedString === "shaked") {
+            shakedTimes++
+            if (shakedTimes === 1) {
+                rychlost = 30
+            } else if (shakedTimes === 2) {
+                rychlost = 100
+                shakedTimes = 0
+            }
         }
     }
 })
