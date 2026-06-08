@@ -28,7 +28,7 @@ radio.onReceivedString(function (receivedString: string) {
         } else if (receivedString === "shaked") {
             shakedTimes++
             if (shakedTimes === 1) {
-                rychlost = 30
+                rychlost = 20
             } else if (shakedTimes === 2) {
                 rychlost = 100
                 shakedTimes = 0
