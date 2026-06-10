@@ -1,38 +1,56 @@
-//*Kód pro ovládání microbitu*
-let serioveeCisloOvladace = -1133145777
+let controllerSerialNumber = -1133145777
 let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
+music.setVolume(255)
 radio.setGroup(23)
-let rychlost: number = 100
-let shakedTimes: number = 0
+
+let leftMotorCompensation = 1.15
+
+strip.showColor(NeoPixelColors.Purple)
+strip.show()
 
 radio.onReceivedString(function (receivedString: string) {
-    let ovladac = radio.receivedPacket(RadioPacketProperty.SerialNumber)
-    if (ovladac === serioveeCisloOvladace) {
+    let sender = radio.receivedPacket(RadioPacketProperty.SerialNumber)
+    if (sender !== controllerSerialNumber) { return }
 
-        if (receivedString === "goForward") {
-            PeeWeeLight.wheelSpeed(rychlost, -rychlost)
-            strip.showColor(NeoPixelColors.Red)
-        } else if(receivedString === "goBack"){
-            PeeWeeLight.wheelSpeed(-rychlost, rychlost)
-            strip.showColor(NeoPixelColors.Indigo)
-        } else if (receivedString === "turnLeft") {
-            PeeWeeLight.wheelSpeed(rychlost, 0)
-            strip.showColor(NeoPixelColors.Yellow)
-        } else if (receivedString === "turnRight") {
-            PeeWeeLight.wheelSpeed(0, -rychlost)
-            strip.showColor(NeoPixelColors.Blue)
-        } else if (receivedString === "stop") {
-            PeeWeeLight.wheelStop()
-            strip.clear()
-            strip.show()
-        } else if (receivedString === "shaked") {
-            shakedTimes++
-            if (shakedTimes === 1) {
-                rychlost = 20
-            } else if (shakedTimes === 2) {
-                rychlost = 100
-                shakedTimes = 0
-            }
-        }
+    let indexY = receivedString.indexOf("Y")
+    let indexG = receivedString.indexOf("G")
+
+    let xText = receivedString.substr(1, indexY - 1)
+    let xAngle = parseInt(xText)
+
+    let yText = receivedString.substr(indexY + 1, indexG - (indexY + 1))
+    let yAngle = parseInt(yText)
+
+    let gText = receivedString.substr(indexG + 1)
+    let gear = parseInt(gText)
+
+    let throttle = yAngle
+    let steering = xAngle
+
+    if (gear === 1 && Math.abs(steering) > 15) {
+        steering = steering * 1.5
     }
+
+    let leftSpeed = throttle + steering
+    let rightSpeed = throttle - steering
+
+    if (rightSpeed != 0) {
+        rightSpeed = rightSpeed * leftMotorCompensation
+    }
+
+    leftSpeed = Math.max(-100, Math.min(100, leftSpeed))
+    rightSpeed = Math.max(-100, Math.min(100, rightSpeed))
+
+    if (throttle > 15) {
+        strip.showColor(NeoPixelColors.Green)
+    } else if (throttle < -15) {
+        strip.showColor(NeoPixelColors.Red)
+    } else if (Math.abs(steering) > 10) {
+        strip.showColor(NeoPixelColors.Yellow)
+    } else {
+        strip.showColor(NeoPixelColors.Purple)
+    }
+    strip.show()
+
+    PeeWeeLight.wheelSpeed(leftSpeed, -rightSpeed)
 })
