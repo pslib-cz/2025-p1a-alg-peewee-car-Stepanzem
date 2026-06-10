@@ -1,6 +1,9 @@
+// *Kód pro ovladač*
+// AI bylo použito na to aby nám poradilo jak fungují nějaké funkce (eg. Math.map, Rotation.Pitch/Roll),
+// také bylo použito pro debugging a kontrolu logiky u některých částí kódu
+
 let controllerSerialNumber = -1133145777
 let strip = neopixel.create(DigitalPin.P8, 9, NeoPixelMode.RGB)
-music.setVolume(255)
 radio.setGroup(23)
 
 let leftMotorCompensation = 1.15
@@ -10,7 +13,9 @@ strip.show()
 
 radio.onReceivedString(function (receivedString: string) {
     let sender = radio.receivedPacket(RadioPacketProperty.SerialNumber)
-    if (sender !== controllerSerialNumber) { return }
+    if (sender !== controllerSerialNumber) {
+        return
+    }
 
     let indexY = receivedString.indexOf("Y")
     let indexG = receivedString.indexOf("G")
@@ -27,8 +32,8 @@ radio.onReceivedString(function (receivedString: string) {
     let throttle = yAngle
     let steering = xAngle
 
-    if (gear === 1 && Math.abs(steering) > 15) {
-        steering = steering * 1.5
+    if (gear == 1) {
+        steering = steering * 0.7
     }
 
     let leftSpeed = throttle + steering
